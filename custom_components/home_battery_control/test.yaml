@@ -1,5 +1,5 @@
 template:
   - sensor:
-      - name: "custom_component_003"
-        unique_id: "custom_component_003"
-        state: "HACS 003"
+      - name: "custom_component_004"
+        unique_id: "custom_component_004"
+        state: "HACS 004"
