@@ -1,0 +1,11 @@
+# HA runtime state — never commit these
+.storage/
+.cache/
+.HA_VERSION
+.ha_run.lock
+home-assistant_v2.db
+home-assistant_v2.db-shm
+home-assistant_v2.db-wal
+home-assistant.log
+home-assistant.log.*
+blueprints/
