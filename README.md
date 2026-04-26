@@ -2,6 +2,8 @@
 
 A [HACS](https://hacs.xyz/) custom integration for [Home Assistant](https://www.home-assistant.io/) that provides control and automation for home battery systems.
 
+This project is the next major iteration of [gitcodebob/marstek-venus-rs485-node-red](https://github.com/gitcodebob/marstek-venus-rs485-node-red) ([docs](https://docs.homebatterycontrol.com/)). Often shortened to 'HBC'.
+
 ## Features
 
 - Manage and monitor your home battery from within Home Assistant

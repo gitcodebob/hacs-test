@@ -1,4 +1,8 @@
 .vscode
+.venv/
 .github/instructions/home-assistant.instructions.md
 custom_components/CLAUDE.md
 project/
+__pycache__/
+.pytest_cache/
+*.pyc
