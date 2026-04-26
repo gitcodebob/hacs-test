@@ -2,6 +2,7 @@
 .venv/
 .github/instructions/home-assistant.instructions.md
 custom_components/CLAUDE.md
+# project/ is a separate private git repo (HBC project docs, ADRs, research, specs)
 project/
 __pycache__/
 .pytest_cache/

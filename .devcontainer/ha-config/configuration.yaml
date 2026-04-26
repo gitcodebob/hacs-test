@@ -1,0 +1,24 @@
+homeassistant:
+  name: Dev Container
+
+# ~Loads default set of integrations. Do not remove.~
+# default_config:
+
+# Dev container configuration — replaces default_config to avoid multicast
+# errors on Docker Desktop for Windows (zeroconf/ssdp require IP_ADD_MEMBERSHIP
+# which is not supported by the Docker vEthernet adapter).
+
+# Core UI
+frontend:
+config:
+
+# Logging
+logger:
+  default: warning
+  logs:
+    custom_components: debug
+
+# Other safe default_config components
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml

@@ -1,0 +1,4 @@
+2026-04-26 22:34:32.254 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration home_battery_control_test which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2026-04-26 22:34:32.643 WARNING (ImportExecutor_0) [py.warnings] /usr/local/lib/python3.14/site-packages/rich/segment.py:547: SyntaxWarning: 'return' in a 'finally' block
+  return
+

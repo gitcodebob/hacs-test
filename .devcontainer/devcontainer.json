@@ -1,0 +1,20 @@
+{
+  "name": "Home Assistant Dev",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "homeassistant",
+  "workspaceFolder": "/config",
+  "forwardPorts": [
+    8124
+  ],
+  "remoteUser": "root",
+  "overrideCommand": false,
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "redhat.vscode-yaml",
+        "keesschollaart.vscode-home-assistant"
+      ]
+    }
+  }
+}
