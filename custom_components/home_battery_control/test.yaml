@@ -1,5 +1,0 @@
-template:
-  - sensor:
-      - name: "custom_component_004"
-        unique_id: "custom_component_004"
-        state: "HACS 004"

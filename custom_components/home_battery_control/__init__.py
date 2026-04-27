@@ -1,12 +1,37 @@
-"""De Home Battery Control integratie."""
+"""Home Battery Control integration setup."""
 
-import logging
+from __future__ import annotations
 
-_LOGGER = logging.getLogger(__name__)
-# Unique identifier for this integration; must match the folder name under custom_components/ , so "home_battery_control" in this case.
-DOMAIN = "home_battery_control"
+from dataclasses import dataclass
+
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+
+from .const import CONF_P1_ENTITY, DOMAIN
+from .coordinator import HBCCoordinator
+from .strategy import LoggingStrategy
+
+__all__ = ["DOMAIN", "async_setup_entry", "async_unload_entry"]
 
 
-async def async_setup(hass, config):
-    """Setup via YAML (leeg laten omdat we packages gebruiken)."""
+@dataclass
+class HBCRuntimeData:
+    coordinator: HBCCoordinator
+    strategy: LoggingStrategy
+
+
+type HBCConfigEntry = ConfigEntry[HBCRuntimeData]
+
+
+async def async_setup_entry(hass: HomeAssistant, entry: HBCConfigEntry) -> bool:
+    p1_entity = entry.data[CONF_P1_ENTITY]
+    strategy = LoggingStrategy()
+    coordinator = HBCCoordinator(hass, p1_entity, strategy)
+    coordinator.prime_from_current_state()
+    entry.runtime_data = HBCRuntimeData(coordinator=coordinator, strategy=strategy)
+    return True
+
+
+async def async_unload_entry(hass: HomeAssistant, entry: HBCConfigEntry) -> bool:
+    await entry.runtime_data.coordinator.async_shutdown()
     return True

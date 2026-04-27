@@ -1,8 +1,10 @@
 {
-"domain": "home_battery_control_test",
-"name": "Home Battery Control Test",
-"codeowners": ["@gitcodebob"],
-"version": "0.0.1",
-"documentation": "https://github.com/gitcodebob/hacs-test",
-"iot_class": "local_polling"
-} 
+  "domain": "home_battery_control",
+  "name": "Home Battery Control",
+  "codeowners": ["@gitcodebob"],
+  "config_flow": true,
+  "integration_type": "hub",
+  "iot_class": "local_push",
+  "version": "0.0.1",
+  "documentation": "https://github.com/gitcodebob/hacs-test"
+}

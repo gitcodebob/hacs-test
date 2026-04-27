@@ -1,0 +1,16 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Home Battery Control",
+        "description": "Select the P1 power meter sensor for your home.",
+        "data": {
+          "p1_entity": "P1 power meter"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "Home Battery Control is already configured."
+    }
+  }
+}
