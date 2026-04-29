@@ -5,3 +5,11 @@ project/
 __pycache__/
 .pytest_cache/
 *.pyc
+
+# Node-RED runtime artifacts (commit only package.json and flows.json)
+.devcontainer/nodered-data/node_modules/
+.devcontainer/nodered-data/.config.*.json
+.devcontainer/nodered-data/.flows.json.backup
+.devcontainer/nodered-data/.sessions.json
+.devcontainer/nodered-data/lib/
+.devcontainer/nodered-data/.npm/

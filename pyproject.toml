@@ -18,3 +18,9 @@ pythonpath = ["."]
 
 [tool.coverage.run]
 source = ["custom_components/home_battery_control"]
+
+[tool.pyright]
+# HA's flow-result TypedDicts mark every key as NotRequired, so direct
+# subscript access in tests is flagged on every config-flow assertion.
+# This is signal-to-noise bad; HA core disables the rule in its own tests.
+reportTypedDictNotRequiredAccess = "none"

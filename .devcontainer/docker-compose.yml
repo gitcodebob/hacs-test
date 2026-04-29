@@ -1,9 +1,19 @@
 services:
-  homeassistant:
+  ha-dev:
     image: ghcr.io/home-assistant/home-assistant:stable
     volumes:
       - ./ha-config:/config
       - ../custom_components:/config/custom_components
     ports:
-      - "8124:8123"
+      - "8123:8123"
     restart: unless-stopped
+
+  nodered:
+    image: nodered/node-red:4.0
+    volumes:
+      - ./nodered-data:/data
+    ports:
+      - "1880:1880"
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Amsterdam

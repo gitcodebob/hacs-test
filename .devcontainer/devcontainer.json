@@ -1,10 +1,11 @@
 {
   "name": "Home Assistant Dev",
   "dockerComposeFile": "docker-compose.yml",
-  "service": "homeassistant",
+  "service": "ha-dev",
   "workspaceFolder": "/config",
   "forwardPorts": [
-    8124
+    8123,
+    1880
   ],
   "remoteUser": "root",
   "overrideCommand": false,

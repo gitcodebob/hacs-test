@@ -1,4 +1,4 @@
-"""End-to-end wiring test: P1 state change -> coordinator -> strategy."""
+"""End-to-end wiring test: P1 state change -> P1SensorListener -> StrategyPort."""
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 

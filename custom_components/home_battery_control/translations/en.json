@@ -7,10 +7,18 @@
         "data": {
           "p1_entity": "P1 power meter"
         }
+      },
+      "reconfigure": {
+        "title": "Reconfigure Home Battery Control",
+        "description": "Change the P1 power meter sensor.",
+        "data": {
+          "p1_entity": "P1 power meter"
+        }
       }
     },
     "abort": {
-      "already_configured": "Home Battery Control is already configured."
+      "already_configured": "Home Battery Control is already configured.",
+      "reconfigure_successful": "Home Battery Control was reconfigured."
     }
   }
 }
