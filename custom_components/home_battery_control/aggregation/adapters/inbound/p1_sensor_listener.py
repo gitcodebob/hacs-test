@@ -1,11 +1,10 @@
-"""P1SensorListener — driving adapter in the HBC hexagonal architecture.
+"""P1SensorListener — inbound adapter for State Aggregation.
 
-Translates Home Assistant state-change events from the P1 grid-power sensor
-into domain calls on a StrategyPort. This is a push-mode adapter: it does
-not poll. It subscribes to entity state changes and forwards valid readings
-to the strategy, which is responsible for producing a solution.
+Translates HA `state_changed` events from the P1 grid-power sensor into
+calls on the Aggregator's ForBuildingHbcMsg port. Push-mode: subscribes
+to entity state changes; does not poll.
 
-See ADR-002 for the architectural framing.
+See ADR-002 §"State Aggregation".
 """
 
 from __future__ import annotations
@@ -23,26 +22,26 @@ from homeassistant.core import (
 from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .strategy_port import StrategyPort
+from ...core.ports import ForBuildingHbcMsg
 
 _LOGGER = logging.getLogger(__name__)
 
 
 class P1SensorListener(DataUpdateCoordinator[float | None]):
-    """Driving adapter: subscribes to the P1 sensor and forwards readings to a StrategyPort."""
+    """Subscribes to the P1 sensor and forwards readings to ForBuildingHbcMsg."""
 
     def __init__(
         self,
         hass: HomeAssistant,
         entry: ConfigEntry,
         p1_entity: str,
-        strategy: StrategyPort,
+        aggregator: ForBuildingHbcMsg,
     ) -> None:
         # Passing config_entry explicitly opts in to HA's auto-cleanup:
         # the coordinator's `async_shutdown` is wired to the entry's unload.
         super().__init__(hass, _LOGGER, name="P1SensorListener", config_entry=entry)
         self._p1_entity = p1_entity
-        self._strategy = strategy
+        self._aggregator = aggregator
         # async_on_unload guarantees this listener is detached when the
         # entry is unloaded or reloaded — no manual bookkeeping needed.
         entry.async_on_unload(
@@ -71,5 +70,5 @@ class P1SensorListener(DataUpdateCoordinator[float | None]):
                 state.state,
             )
             return
-        self._strategy.on_grid_power(power_w)
+        self._aggregator.on_grid_power(power_w)
         self.async_set_updated_data(power_w)
