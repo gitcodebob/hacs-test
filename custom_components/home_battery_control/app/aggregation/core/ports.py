@@ -13,6 +13,7 @@ from __future__ import annotations
 from typing import Protocol
 
 from ...domain.hbc_msg import HbcMsg
+from .house_state_snapshot import HouseStateSnapshot
 
 # ---------------------------------------------------------------------------
 # Inbound — use cases the core OFFERS (called by inbound adapters)
@@ -33,6 +34,22 @@ class ForBuildingHbcMsg(Protocol):
 # ---------------------------------------------------------------------------
 # Outbound — use cases the core DELEGATES TO (implemented by outbound adapters)
 # ---------------------------------------------------------------------------
+
+
+class ForReadingHouseState(Protocol):
+    """Pull a snapshot of all relevant HA entity states.
+
+    The Aggregator calls this after a trigger fires (e.g. `on_grid_power`)
+    to gather the rest of the data it needs to build an HbcMsg. The trigger
+    value itself is *not* part of the snapshot — it arrived via the inbound
+    port and the core already has it in hand.
+
+    Phase 2 (ADR-002): implemented by an HA adapter that reads entity states
+    via `hass.states.get(...)`. Not used in Phase 1 — the Aggregator still
+    forwards the raw P1 reading so the existing POC keeps working.
+    """
+
+    def read(self) -> HouseStateSnapshot: ...
 
 
 class ForPublishingHbcMsg(Protocol):
