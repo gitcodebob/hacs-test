@@ -19,6 +19,26 @@ and `outbound.py` port modules), `resources/`, `strategy/`, `planning/`, `market
 package with `__init__.py`. No logic yet.
 **Test:** `import` of every package succeeds; pytest collects an empty suite green.
 
+### Todo — refine Plan and HouseState
+Before step 2 nails down the schemas, resolve the open questions in the ADRs so the
+value-object shapes don't get versioned twice:
+- **`plan` shape — RESOLVED: current slot only.** `HouseState` is a snapshot of the
+  *current* state of the house, so `HouseState.plan` carries only the current slot (resolved
+  setpoints for now), never the whole horizon. The full horizon lives in the planning
+  context (`sensor.hbc_plan`); gather projects the current slot into `HouseState`. This drops
+  the ADR-005 `plan.slots[*]` array form. Keep the slot keyed by resource name (not flat
+  `battery_power_w` fields) so it matches `HouseState.resources` / `Solution`.
+- **Meter/prices placement.** Decide whether observable-only resources live under
+  `resources` (read like any resource) or are promoted to top-level fields (`grid_power_w`,
+  `prices`), as ADR-004's JSON shows. Settles whether `resources` is controllable-only.
+- **`resources` value type.** `dict[str, ResourceState]` (typed) vs `dict[str, dict]` (raw,
+  as in the JSON example).
+- **`settings`** appears in the ADR-004 schema but is defined nowhere — what feeds it, and
+  is it in scope for Phase 1?
+- **`HouseState` vs `GridContext`.** The ADRs pair them; decide whether one composes the
+  other or they stay independent, since step 2 defines both.
+- **Representation.** Frozen dataclass vs pydantic, given "pure Python, no HA imports".
+
 ### 2. Core value objects & port protocols
 Define the cross-context payloads — `HouseState` (incl. `plan=None`), `Solution`,
 `ResourceState`, `GridContext` — and the port `Protocol`s: `ForGatheringState`,
