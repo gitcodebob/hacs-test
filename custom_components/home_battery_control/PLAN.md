@@ -19,25 +19,28 @@ and `outbound.py` port modules), `resources/`, `strategy/`, `planning/`, `market
 package with `__init__.py`. No logic yet.
 **Test:** `import` of every package succeeds; pytest collects an empty suite green.
 
-### Todo — refine Plan and HouseState
-Before step 2 nails down the schemas, resolve the open questions in the ADRs so the
-value-object shapes don't get versioned twice:
-- **`plan` shape — RESOLVED: current slot only.** `HouseState` is a snapshot of the
-  *current* state of the house, so `HouseState.plan` carries only the current slot (resolved
-  setpoints for now), never the whole horizon. The full horizon lives in the planning
-  context (`sensor.hbc_plan`); gather projects the current slot into `HouseState`. This drops
-  the ADR-005 `plan.slots[*]` array form. Keep the slot keyed by resource name (not flat
-  `battery_power_w` fields) so it matches `HouseState.resources` / `Solution`.
-- **Meter/prices placement.** Decide whether observable-only resources live under
-  `resources` (read like any resource) or are promoted to top-level fields (`grid_power_w`,
-  `prices`), as ADR-004's JSON shows. Settles whether `resources` is controllable-only.
-- **`resources` value type.** `dict[str, ResourceState]` (typed) vs `dict[str, dict]` (raw,
-  as in the JSON example).
-- **`settings`** appears in the ADR-004 schema but is defined nowhere — what feeds it, and
-  is it in scope for Phase 1?
-- **`HouseState` vs `GridContext`.** The ADRs pair them; decide whether one composes the
-  other or they stay independent, since step 2 defines both.
-- **Representation.** Frozen dataclass vs pydantic, given "pure Python, no HA imports".
+### Plan and HouseState refinement — RESOLVED
+All six sub-points settled before step 2 begins. Step 2 builds the value objects directly
+from the references below; no further pre-work required.
+
+- **`plan` shape — current slot only.** `HouseState.plan` carries the resolved setpoints
+  for *now*, keyed by resource name (see [ADR-004](../../project/decisions-mk2/ADR-004-planning-context.md)
+  *HouseState addition*). The full horizon stays on `sensor.hbc_plan`.
+- **Meter/prices placement.** Meter is one resource under `resources` (per-phase signed
+  `power_w` map); prices live under `context`. See [ADR-005](../../project/decisions-mk2/ADR-005-resource-abstraction.md)
+  facet model and [ADR-004](../../project/decisions-mk2/ADR-004-planning-context.md)
+  *HouseState addition*.
+- **`resources` value type — typed.** `Mapping[str, EnergyResourceState]` with a typed
+  dataclass; never a raw entity-state passthrough.
+- **`settings` — typed projection of HA entity reads.** Each user-tunable (objective,
+  comfort bounds, mode toggles) is one HA entity; gather projects them into a typed
+  `Settings` dataclass; see [ADR-002](../../project/decisions-mk2/ADR-002-control-architecture.md)
+  *Settings (runtime tunables)*. Distinct from `ResourceConfig` (static, ConfigEntry sub-entries).
+  Phase 1 scope: the gather wiring lands, but only the fields the first strategy needs.
+- **`HouseState` vs `GridContext` — composed.** `HouseState.context: GridContext`. Reactive
+  mode runs with an empty or `now`-only context; planning mode populates the horizon.
+- **Representation — frozen dataclass.** `@dataclass(frozen=True)`, pure Python, no HA
+  imports, hashable for the `hbc_last_decision` digest.
 
 ### 2. Core value objects & port protocols
 Define the cross-context payloads — `HouseState` (incl. `plan=None`), `Solution`,
